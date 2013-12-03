@@ -14,23 +14,6 @@
     android:layout_height="wrap_content"
     android:inputType="text" />
 
-    <Button
-        android:id="@+id/addProductFromList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/scanBarCodeToAdd"
-        android:layout_alignLeft="@+id/scanBarCodeToAdd"
-        android:onClick="addNewProductFromList"
-        android:text="@string/button_add_from_list" />
-
-    <Button
-        android:id="@+id/scanBarCodeToAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/saveButtonNewList"
-        android:layout_centerHorizontal="true"
-        android:onClick="addNewProductAfterScan"
-        android:text="@string/button_scan_to_add" />
 
     <Button
         android:id="@+id/saveButtonNewList"
@@ -40,5 +23,14 @@
         android:layout_centerHorizontal="true"
         android:onClick="saveNewList"
         android:text="@string/button_save" />
+
+    <Button
+        android:id="@+id/addProductFromList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/saveButtonNewList"
+        android:layout_centerHorizontal="true"
+        android:onClick="openNewPageToScan"
+        android:text="@string/button_add_from_list" />
 
 </RelativeLayout>

@@ -7,10 +7,44 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AddNewProduct" >
-
-    <TextView
+    
+    <Button
+        android:id="@+id/addNewProductFromList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/scanBarCodeToAdd"
+        android:onClick="addNewProduct"
+        android:text="@string/button_add_from_list" />
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/addNewProductFromList"
+        android:layout_below="@+id/scanBarCodeToAdd" >
+
+    </ListView>
+
+    <EditText
+        android:id="@+id/a"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@android:id/list"
+        android:layout_alignParentTop="true"
+        android:ems="10"
+        android:inputType="text" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/scanBarCodeToAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/a"
+        android:layout_centerHorizontal="true"
+        android:onClick="addNewProductAfterScan"
+        android:text="@string/button_scan_to_add" />
 
 </RelativeLayout>

@@ -462,6 +462,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close(); 
     }
     
+    /*
+     * add new product
+     */
+    public void addProductWithBarCode(ProductModel product, long list_id){
+    	SQLiteDatabase db = this.getWritableDatabase();
+    	 
+        ContentValues values = new ContentValues();
+        values.put(KEY_AMOUNT, product.getAmount()); 
+        values.put(KEY_BARCODE_ID, product.getIDBarCode()); 
+        values.put(KEY_LIST_ID, list_id);
+         
+        db.insert(TABLE_PRODUCT, null, values);
+        db.close(); 
+    }
+    
  /*
   	* Closing Database connection
   */

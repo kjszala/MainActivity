@@ -3,11 +3,8 @@ package com.example.shoppinglist;
 import java.util.List;
 
 import com.example.shoppinglist.sqlite.helper.DatabaseHelper;
-import com.example.shoppinglist.sqlite.model.BarcodeModel;
 import com.example.shoppinglist.sqlite.model.ListModel;
 import com.example.shoppinglist.sqlite.model.ProductModel;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -26,7 +23,6 @@ public class CreateNewListDataBaseActivity extends Activity {
 	String name = null;
 	EditText mEdit;
 	ListModel newList;
-	String scanContent = null;
 	List<ProductModel> lpm;
 	
 	@Override
@@ -76,9 +72,17 @@ public class CreateNewListDataBaseActivity extends Activity {
 	
 	public void saveNewList(View view) {
 		name = mEdit.getText().toString();
-		if (name != null && name != "New list name") {
+		if (name != null) {
 				newList.setName(name);
-				db.addList(newList);					
+				long listID = db.createList(newList);
+				List<ProductModel> products = db.getAllProduct(-1);
+				
+				for (ProductModel pdb : products) {
+					if (pdb.getIDList() == -1) {
+						pdb.setIDList(Integer.valueOf(String.valueOf(listID)));
+						db.updateProduct(pdb);					}
+				}
+				
 				NavUtils.navigateUpFromSameTask(this);
 		
 		}
@@ -89,46 +93,10 @@ public class CreateNewListDataBaseActivity extends Activity {
 		}
 	}
 	
-	public void addNewProductAfterScan(View view){
-		IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-		scanIntegrator.initiateScan();
-	
+	public void openNewPageToScan(View view){
+		Intent intent = new Intent(this, AddNewProduct.class);
+		startActivity(intent);	
 	}
 	
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		IntentResult scanningResult = IntentIntegrator.parseActivityResult(
-				requestCode, resultCode, intent);
-		boolean existBarCode = false;
-		if (scanningResult != null) {
-			scanContent = scanningResult.getContents();
-			List<BarcodeModel> barCodeDB = db.getAllBarCode();
-			for (BarcodeModel bd : barCodeDB) {
-				if (bd.getBarCode() == scanContent) {
-					existBarCode = true;
-					
-					lpm.add(new ProductModel(0,bd.getId(),-1));
-					break;
-				}
-			}
-		}
-
-		else if(!existBarCode) {
-			Toast toast = Toast.makeText(getApplicationContext(),
-					"Bar code isn't in database!", Toast.LENGTH_SHORT);
-			toast.show();
-		}
-		
-		else {
-			Toast toast = Toast.makeText(getApplicationContext(),
-					"No scan data receive!", Toast.LENGTH_SHORT);
-			toast.show();
-		}
-	}
-	
-	
-	public void addNewProductFromList(View view){
-		
-	}
 
 }

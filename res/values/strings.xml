@@ -21,5 +21,6 @@
     <string name="title_activity_create_new_list_data_base">Create new shopping list</string>
     <string name="title_activity_add_new_bar_code">AddNewBarCode</string>
     <string name="title_activity_add_new_product">AddNewProduct</string>
+    <string name="title_activity_edit_existing_list_data_base">EditExistingListDataBase</string>
 
 </resources>

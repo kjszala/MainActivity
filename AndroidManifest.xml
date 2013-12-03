@@ -57,6 +57,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.shoppinglist.CreateNewListDataBaseActivity" />
         </activity>
+        <activity
+            android:name="com.example.shoppinglist.EditExistingListDataBase"
+            android:label="@string/title_activity_edit_existing_list_data_base" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".com.example.shoppinglist.BrowseExistingListDataBase" />
+        </activity>
     </application>
 
 </manifest>
