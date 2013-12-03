@@ -40,25 +40,22 @@ public class BrowseExistingListDataBaseActivity extends ListActivity {
 		// Reading all contacts
         Log.d("Reading: ", "Reading all contacts111111111.."); 
         listView2 = getListView();
-        
-        // listening to single list item on click
         listView2.setOnItemClickListener(new OnItemClickListener() {
-          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               
-              // selected item 
-              int listID = Integer.valueOf(((TextView) view).getText().toString());
-               
-              // Launching new Activity on selecting single List Item
-              Intent i = new Intent(getApplicationContext(), EditExistingListDataBase.class);
-              // sending data to new activity
-              i.putExtra("listID", listID);
-              startActivity(i);
-             
-          }
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            	Log.d("czy wogole wchodzi do niego", "ciekawe");
+                
+                // selected item 
+                int listID = Integer.valueOf(((TextView) view).getText().toString());
+                 Log.d("weszlo cos",((TextView) view).getText().toString());
+                // Launching new Activity on selecting single List Item
+                Intent i = new Intent(getApplicationContext(), EditExistingListDataBase.class);
+                // sending data to new activity
+                i.putExtra("listID", listID);
+                startActivity(i);       
+            }
 
-		
-        });
-        
+  		
+          });
         listView2.setAdapter(adapter);
 	}
 
@@ -95,5 +92,6 @@ public class BrowseExistingListDataBaseActivity extends ListActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	
+	
 }

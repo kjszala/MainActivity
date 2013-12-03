@@ -11,6 +11,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import android.os.Bundle;
 import android.app.ListActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,7 +52,8 @@ public class AddNewProduct extends ListActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  
                 // selected item 
-                int barCodeID = Integer.valueOf(((TextView) view).getText().toString());
+                int barCodeID = Integer.valueOf(String.valueOf(listView1.getItemIdAtPosition(position)));
+                Log.d("something", String.valueOf(barCodeID));
                 product.setIDBarCode(barCodeID);               
             }
 

@@ -21,6 +21,8 @@
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:focusable="true"
+        android:clickable="true"
         android:layout_above="@+id/addNewProductFromList"
         android:layout_below="@+id/scanBarCodeToAdd" >
 
