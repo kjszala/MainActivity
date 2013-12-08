@@ -2,44 +2,58 @@ package com.example.shoppinglist;
 
 import java.util.List;
 
+import com.example.shoppinglist.adapters.AdapterProductList;
 import com.example.shoppinglist.sqlite.helper.DatabaseHelper;
 import com.example.shoppinglist.sqlite.model.ListModel;
 import com.example.shoppinglist.sqlite.model.ProductModel;
 
 import android.os.Bundle;
-import android.app.Activity;
+import android.annotation.SuppressLint;
+import android.app.ListActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 
-public class CreateNewListDataBaseActivity extends Activity {
+@SuppressLint("NewApi")
+public class CreateNewListDataBaseActivity extends ListActivity {
 	DatabaseHelper db;
 	String name = null;
 	EditText mEdit;
 	ListModel newList;
 	List<ProductModel> lpm;
+	private ListView listView1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+//tu dopisac i dorobic!! koniecznie		    String value = extras.getString("new_variable_name");
+		}
 		setContentView(R.layout.activity_create_new_list_data_base);
 		db = new DatabaseHelper(this);
-		newList = new ListModel();
 		lpm = null;
 		mEdit = (EditText) findViewById(R.id.listNameField);
-		mEdit.setText(null);
+		Log.d("nazwa listy", newList.getName());
+		mEdit.setText(newList.getName());
+		List<ProductModel> products = db.getAllProduct(-1);
+		AdapterProductList adapter = new AdapterProductList(this,
+                R.layout.product_list_item, products);
+        listView1 = getListView();
+        listView1.setAdapter(adapter);
 	}
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@SuppressLint("NewApi")
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);

@@ -29,7 +29,7 @@
     </ListView>
 
     <EditText
-        android:id="@+id/a"
+        android:id="@+id/newProductAmount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@android:id/list"
@@ -44,7 +44,7 @@
         android:id="@+id/scanBarCodeToAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/a"
+        android:layout_below="@+id/newProductAmount"
         android:layout_centerHorizontal="true"
         android:onClick="addNewProductAfterScan"
         android:text="@string/button_scan_to_add" />

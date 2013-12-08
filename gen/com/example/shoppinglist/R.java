@@ -24,10 +24,10 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int a=0x7f080005;
-        public static final int action_settings=0x7f080010;
+        public static final int action_settings=0x7f080012;
         public static final int addNewProductFromList=0x7f080003;
         public static final int addProductFromList=0x7f080009;
+        public static final int amount=0x7f080010;
         public static final int barCodeNameField=0x7f080000;
         public static final int button1=0x7f080006;
         public static final int button2=0x7f08000b;
@@ -37,6 +37,8 @@ public final class R {
         public static final int listNameField=0x7f080007;
         public static final int name_bar_code=0x7f08000e;
         public static final int name_list=0x7f08000f;
+        public static final int name_product=0x7f080011;
+        public static final int newProductAmount=0x7f080005;
         public static final int saveButtonNewList=0x7f080008;
         public static final int save_button=0x7f080002;
         public static final int scanBarCodeToAdd=0x7f080004;
@@ -53,6 +55,7 @@ public final class R {
         public static final int bar_code_list_item=0x7f030007;
         public static final int bra_code_to_add_product=0x7f030008;
         public static final int lists_list_item=0x7f030009;
+        public static final int product_list_item=0x7f03000a;
     }
     public static final class menu {
         public static final int add_new_bar_code=0x7f070000;

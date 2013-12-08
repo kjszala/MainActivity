@@ -14,7 +14,16 @@
     android:layout_height="wrap_content"
     android:inputType="text" />
 
+	<ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:focusable="true"
+        android:clickable="true"
+        android:layout_below="@+id/saveButtonNewList" >
 
+    </ListView>
+    
     <Button
         android:id="@+id/saveButtonNewList"
         android:layout_width="wrap_content"

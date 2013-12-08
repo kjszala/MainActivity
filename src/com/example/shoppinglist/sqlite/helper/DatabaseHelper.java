@@ -100,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      
         // insert row
         long list_id = db.insert(TABLE_LIST, null, values);
-   
+        db.close();
         return list_id;
     }
     
@@ -116,7 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      
         // insert row
         long barCodes_id = db.insert(TABLE_BAR_CODE, null, values);
-   
+        db.close();
         return barCodes_id;
     }
  
@@ -133,7 +133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      
         // insert row
         long product_id = db.insert(TABLE_PRODUCT, null, values);
-   
+        db.close();
         return product_id;
     }
 
@@ -161,7 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ListModel ldb = new ListModel();
         ldb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         ldb.setName((c.getString(c.getColumnIndex(KEY_NAME))));
-     
+        db.close();
         return ldb;
     }
     
@@ -185,6 +185,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             	list.add(new ListModel(id, name));
             }
         }
+        c.close();
+        db.close();
         return list;
     }
     
@@ -198,8 +200,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_NAME, list.getName());
      
         // updating row
-        return db.update(TABLE_LIST, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(list.getId()) });
+        int databaseID = db.update(TABLE_LIST, values, KEY_ID + " = ?", new String[] { String.valueOf(list.getId()) });
+        db.close();
+        return databaseID;
     }
 
     /*
@@ -219,6 +222,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // now delete the bar code
         db.delete(TABLE_LIST, KEY_ID + " = ?",
                 new String[] { String.valueOf(listToDelete.getId()) });
+        db.close();
     	
     }
 
@@ -261,7 +265,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         bcdb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         bcdb.setName((c.getString(c.getColumnIndex(KEY_NAME))));
         bcdb.setBarCode(c.getString(c.getColumnIndex(KEY_BARCODESTRING)));
-     
+        c.close();
+        db.close();
         return bcdb;
     }
     
@@ -287,7 +292,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             	barCodes.add(new BarcodeModel(id, name, barCodeName));
             }          
         }
-     
+        c.close();
+        db.close();
         return barCodes;
     }
     
@@ -302,8 +308,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BARCODESTRING, barCodes.getBarCode());
      
         // updating row
-        return db.update(TABLE_BAR_CODE, values, KEY_ID + " = ?",
+        int databaseID = db.update(TABLE_BAR_CODE, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(barCodes.getId()) });
+        db.close();
+        return databaseID;
     }
 
     /*
@@ -325,6 +333,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // now delete the bar code
         db.delete(TABLE_BAR_CODE, KEY_ID + " = ?",
                 new String[] { String.valueOf(barCodes.getId()) });
+        db.close();
     }
 
     /*
@@ -365,7 +374,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ProductModel pdb = new ProductModel();
         pdb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         pdb.setAmount((c.getInt(c.getColumnIndex(KEY_AMOUNT))));
-     
+        c.close();
+        db.close();
         return pdb;
     }
     
@@ -392,6 +402,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             	products.add(new ProductModel(id, amount, barCodesID, listID));
             }      		   		
     	}
+    	c.close();
+        db.close();
     	return products;
     }
     
@@ -420,6 +432,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }   
         }
      
+        c.close();
+        db.close();
         return products;
     }
     
@@ -433,8 +447,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_AMOUNT, product.getAmount());
      
         // updating row
-        return db.update(TABLE_PRODUCT, values, KEY_ID + " = ?",
+        int databaseID = db.update(TABLE_PRODUCT, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(product.getId()) });
+        db.close();
+        return databaseID;
     }
 
     /*
@@ -444,7 +460,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PRODUCT, KEY_ID + " = ?",
                 new String[] { String.valueOf(product_id) });
-    	
+        db.close();
     }
 
     /*

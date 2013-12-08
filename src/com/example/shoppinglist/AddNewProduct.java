@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.app.NavUtils;
@@ -133,8 +132,10 @@ public class AddNewProduct extends ListActivity {
 		}		
 			
 		public void addNewProduct(View view){
+			mEdit = (EditText) findViewById(R.id.newProductAmount);
 			amount = Integer.valueOf(mEdit.getText().toString());
-			if (amount !=0 && product.getIDBarCode()<=0) {
+			if (amount !=0 && product.getIDBarCode()>=0) {
+				Log.d("hej tu jestem", "if11111111");
 					product.setAmount(amount);
 					db.addProductWithBarCode(product, -1);				
 					NavUtils.navigateUpFromSameTask(this);

@@ -2,7 +2,7 @@ package com.example.shoppinglist;
 
 import java.util.List;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -19,6 +19,7 @@ import com.example.shoppinglist.sqlite.model.BarcodeModel;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+@SuppressLint("NewApi")
 public class AddNewBarCode extends Activity {
 	DatabaseHelper db;
 	String scanContent = null;
@@ -39,7 +40,7 @@ public class AddNewBarCode extends Activity {
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@SuppressLint("NewApi")
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
