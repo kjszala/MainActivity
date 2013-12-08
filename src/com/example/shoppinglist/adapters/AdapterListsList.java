@@ -7,9 +7,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.shoppinglist.R;
@@ -43,8 +41,6 @@ public class AdapterListsList extends ArrayAdapter<ListModel> {
 
 			holder = new RowBeanHolder();
 			holder.name_list = (TextView) row.findViewById(R.id.name_list);
-			holder.btnDelete = (Button) row.findViewById(R.id.buttonDelete);
-			holder.btnDelete.setTag(position);
 			row.setTag(holder);
 			
 		} else {
@@ -54,21 +50,12 @@ public class AdapterListsList extends ArrayAdapter<ListModel> {
 		ListModel object = data.get(position);
 		holder.name_list.setText(object.getName());
 
-	
-	holder.btnDelete.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			//DOPISAC!!!!
-		}
-	}); 
 	return row;
 	}
 	
 	
 	
 	static class RowBeanHolder {
-		Button btnDelete;
 		TextView name_list;
 	}
 }

@@ -2,7 +2,7 @@ package com.example.shoppinglist.sqlite.model;
 
 public class BarcodeModel {
 	
-	int id;
+	long id;
 	String name;
 	String barCode;
 	
@@ -15,14 +15,14 @@ public class BarcodeModel {
 		this.barCode=barCode;
 	}
 	
-	public BarcodeModel(int id, String name, String barCode){
+	public BarcodeModel(long id, String name, String barCode){
 		this.id = id;
 		this.name=name;
 		this.barCode=barCode;
 	}
 	
 	//getters
-	public int getId(){
+	public long getId(){
 		return this.id;
 	}
 	
@@ -36,7 +36,7 @@ public class BarcodeModel {
 	
 	//setters
 
-	public void setId(int id){
+	public void setId(long id){
 		this.id = id;
 	}
 	

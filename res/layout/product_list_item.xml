@@ -4,7 +4,7 @@
     	android:orientation="horizontal"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-    	tools:context=".AddNewProduct" >
+    	tools:context=".CreateNewListDataBaseActivity" >
 
 		<TextView
 		    android:id="@+id/amount"

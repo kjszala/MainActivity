@@ -34,10 +34,15 @@ public class AddNewProduct extends ListActivity {
 	int amount = 0;
 	EditText mEdit;
 	ProductModel product;
-	
+	long listID;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			String value = extras.getString("LIST_ID");
+			listID = Long.valueOf(value);
+		}
 		setContentView(R.layout.activity_add_new_product);
 		// Show the Up button in the action bar.
 		setupActionBar();
@@ -47,12 +52,12 @@ public class AddNewProduct extends ListActivity {
 		AdapterBarCodeToAddProduct adapter = new AdapterBarCodeToAddProduct(this,
                 R.layout.bra_code_to_add_product, barCodeDataForList);
         listView1 = getListView();
+        
         listView1.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                  
                 // selected item 
-                int barCodeID = Integer.valueOf(String.valueOf(listView1.getItemIdAtPosition(position)));
-                Log.d("something", String.valueOf(barCodeID));
+            	long barCodeID = Long.valueOf(String.valueOf(listView1.getItemIdAtPosition(position)));
                 product.setIDBarCode(barCodeID);               
             }
 
@@ -134,11 +139,14 @@ public class AddNewProduct extends ListActivity {
 		public void addNewProduct(View view){
 			mEdit = (EditText) findViewById(R.id.newProductAmount);
 			amount = Integer.valueOf(mEdit.getText().toString());
-			if (amount !=0 && product.getIDBarCode()>=0) {
-				Log.d("hej tu jestem", "if11111111");
+			if (amount !=0) {
 					product.setAmount(amount);
-					db.addProductWithBarCode(product, -1);				
-					NavUtils.navigateUpFromSameTask(this);
+					product.setIDList(listID);
+					long productID = db.createProduct(product);		
+					Intent upIntent = new Intent(this, CreateNewListDataBaseActivity.class);
+					upIntent.putExtra("LIST_ID", String.valueOf(listID));
+					Log.d("id listypro", String.valueOf(db.getProduct(productID).getIDList()));
+					NavUtils.navigateUpTo(this, upIntent);
 			
 			}
 			else if (amount ==0){

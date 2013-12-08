@@ -6,20 +6,10 @@
     android:orientation="vertical" 
     tools:context=".BrowseExistingListDataBaseActivity" >
     
-<Button
-		    android:id="@+id/buttonDelete"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:layout_alignParentRight="true"
-		    android:layout_alignParentTop="true"
-		    android:text="@string/button_delete_bar_code" />
-
 		<TextView
 		    android:id="@+id/name_list"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
-		    android:layout_alignBaseline="@+id/buttonDelete"
-		    android:layout_alignBottom="@+id/buttonDelete"
 		    android:layout_alignParentLeft="true"
 		    android:text="name" />
 

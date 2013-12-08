@@ -5,13 +5,18 @@ import java.util.List;
 import com.example.shoppinglist.adapters.AdapterBarcodeList;
 import com.example.shoppinglist.sqlite.helper.DatabaseHelper;
 import com.example.shoppinglist.sqlite.model.BarcodeModel;
+import com.example.shoppinglist.sqlite.model.ProductModel;
+import com.example.shoppinglist.R;
 
 import android.os.Bundle;
 import android.app.ListActivity;
-import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
@@ -28,30 +33,59 @@ public class BrowseBarCodeDataBaseActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_browse_bar_code_data_base);
 		
-		BarcodeModel barCodes1 = new BarcodeModel("nazwa1", "barcodes1");
-		BarcodeModel barCodes2 = new BarcodeModel("nazwa2", "barcodes2");
+
 		
 		db = new DatabaseHelper(this);
-		
-		db.addBarCode(barCodes1);
-		db.addBarCode(barCodes2);
+
 		
 		barCodeDataForList = db.getAllBarCode();
 		// Reading all contacts
-        Log.d("Reading: ", "Reading all contacts222222.."); 
 		AdapterBarcodeList adapter = new AdapterBarcodeList(this,
                 R.layout.bar_code_list_item, barCodeDataForList);
-		// Reading all contacts
-        Log.d("Reading: ", "Reading all contacts111111111.."); 
         listView1 = getListView();
- 
+        registerForContextMenu(listView1);
         listView1.setAdapter(adapter);
 
 		
 	    
 	}
 	
-	
+    /**
+     * Creates context menu on point list view
+     */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo){
+            super.onCreateContextMenu(menu, v, menuInfo);
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.barcode_context_menu, menu);
+    }
+    
+    
+    /**
+     * Sterring in context menu
+     */
+    @Override
+    public boolean onContextItemSelected(MenuItem item){ 		
+    	AdapterContextMenuInfo  adapterBarCode = (AdapterContextMenuInfo)item.getMenuInfo();     
+    	switch(item.getItemId()) {
+    	case R.id.delete_item_context:
+    		long helpID = Long.valueOf(String.valueOf(adapterBarCode.id));
+    		List<ProductModel> productToDelete = db.getAllProductWithThisBarCode(helpID);
+    		if(productToDelete.size() > 0 ){
+    		for(ProductModel productInList : productToDelete){
+    		db.deleteProduct(productInList.getId());
+    		}
+    		}
+    		db.deleteBarCode(db.getBarCode(helpID));
+    		listView1.invalidateViews();
+    		
+           break;
+            
+    	}
+		return false;
+    }
+    
+    
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
@@ -80,6 +114,7 @@ public class BrowseBarCodeDataBaseActivity extends ListActivity {
 			//
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
+    		//db.closeDB();
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}

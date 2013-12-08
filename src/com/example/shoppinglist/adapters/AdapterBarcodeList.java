@@ -10,10 +10,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 public class AdapterBarcodeList extends ArrayAdapter<BarcodeModel> {
@@ -43,8 +41,6 @@ public class AdapterBarcodeList extends ArrayAdapter<BarcodeModel> {
 
 			holder = new RowBeanHolder();
 			holder.name_bar_code = (TextView) row.findViewById(R.id.name_bar_code);
-			holder.btnDelete = (Button) row.findViewById(R.id.buttonDelete);
-			holder.btnDelete.setTag(position);
 			row.setTag(holder);
 			
 		} else {
@@ -55,20 +51,13 @@ public class AdapterBarcodeList extends ArrayAdapter<BarcodeModel> {
 		holder.name_bar_code.setText(object.getName());
 
 	
-	holder.btnDelete.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			//DOPISAC!!!!
-		}
-	}); 
+	 
 	return row;
 	}
 	
 	
 	
 	static class RowBeanHolder {
-		Button btnDelete;
 		TextView name_bar_code;
 	}
 }

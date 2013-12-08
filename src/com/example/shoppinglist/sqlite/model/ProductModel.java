@@ -1,10 +1,10 @@
 package com.example.shoppinglist.sqlite.model;
 
 public class ProductModel {
-	int id;
+	long id;
 	int amount;
-	int iDBarCode;
-	int iDList;
+	long iDBarCode;
+	long iDList;
 	
 	public ProductModel(){
 		
@@ -14,18 +14,18 @@ public class ProductModel {
 		this.amount=amount;
 	}
 	
-	public ProductModel(int id, int amount){
+	public ProductModel(long id, int amount){
 		this.id=id;
 		this.amount=amount;
 	}
 	
-	public ProductModel( int amount, int iDBarCode, int iDList){
+	public ProductModel( int amount, long iDBarCode, long iDList){
 		this.amount=amount;
 		this.iDBarCode=iDBarCode;
 		this.iDList=iDList;
 	}
 	
-	public ProductModel(int id, int amount, int iDBarCode, int iDList){
+	public ProductModel(long id, int amount, long iDBarCode, long iDList){
 		this.id = id;
 		this.amount=amount;
 		this.iDBarCode=iDBarCode;
@@ -33,7 +33,7 @@ public class ProductModel {
 	}
 	
 	//getters
-	public int getId(){
+	public long getId(){
 		return this.id;
 	}
 	
@@ -41,16 +41,16 @@ public class ProductModel {
 		return this.amount;
 	}
 	
-	public int getIDBarCode(){
+	public long getIDBarCode(){
 		return this.iDBarCode;
 	}
 	
-	public int getIDList(){
+	public long getIDList(){
 		return this.iDList;
 	}
 	
 	//setters
-	public void setId(int id){
+	public void setId(long id){
 		this.id=id;
 	}
 	
@@ -58,11 +58,11 @@ public class ProductModel {
 		this.amount=amount;
 	}
 	
-	public void setIDBarCode(int iDBarCode){
+	public void setIDBarCode(long iDBarCode){
 		this.iDBarCode=iDBarCode;
 	}
 	
-	public void setIDList(int iDList){
+	public void setIDList(long iDList){
 		this.iDList=iDList;
 	}
 

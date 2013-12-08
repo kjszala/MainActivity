@@ -10,13 +10,16 @@ import com.example.shoppinglist.sqlite.model.ProductModel;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
-import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.support.v4.app.NavUtils;
 import android.content.Intent;
 import android.os.Build;
@@ -27,28 +30,71 @@ public class CreateNewListDataBaseActivity extends ListActivity {
 	String name = null;
 	EditText mEdit;
 	ListModel newList;
-	List<ProductModel> lpm;
+	List<ProductModel> products;
 	private ListView listView1;
+	long listID;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-//tu dopisac i dorobic!! koniecznie		    String value = extras.getString("new_variable_name");
+			String value = extras.getString("LIST_ID");
+			listID = Long.valueOf(value);
 		}
+		
 		setContentView(R.layout.activity_create_new_list_data_base);
 		db = new DatabaseHelper(this);
-		lpm = null;
 		mEdit = (EditText) findViewById(R.id.listNameField);
-		Log.d("nazwa listy", newList.getName());
+		newList = db.getList(listID);
 		mEdit.setText(newList.getName());
-		List<ProductModel> products = db.getAllProduct(-1);
+		
+		products = db.getAllProduct(listID);		
 		AdapterProductList adapter = new AdapterProductList(this,
                 R.layout.product_list_item, products);
+		adapter.notifyDataSetChanged();
         listView1 = getListView();
+        registerForContextMenu(listView1);
         listView1.setAdapter(adapter);
+        listView1.invalidateViews();
 	}
+	
+    /**
+     * Creates context menu on point list view
+     */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo){
+            super.onCreateContextMenu(menu, v, menuInfo);
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.product_context_menu, menu);
+    }
+    
+    
+    /**
+     * Sterring in context menu
+     */
+    @Override
+    public boolean onContextItemSelected(MenuItem item){ 		
+    	AdapterContextMenuInfo  adapterList = (AdapterContextMenuInfo)item.getMenuInfo();     
+    	switch(item.getItemId()) {
+    	case R.id.delete_item_context:
+    		long helpID = Long.valueOf(String.valueOf(adapterList.id));
+    		db.deleteProduct(helpID);
+    		listView1.invalidateViews();
+    		
+           break;
+            
+    	
+    	
+    	case R.id.eddit_item_context:
+    	    Intent intent = new Intent(this, AddNewProduct.class);
+    		intent.putExtra("LIST_ID", listID);
+    	    startActivity(intent);
+    		break;
+    		
+    	}
+		return false;
+    }
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -87,16 +133,9 @@ public class CreateNewListDataBaseActivity extends ListActivity {
 	public void saveNewList(View view) {
 		name = mEdit.getText().toString();
 		if (name != null) {
+				newList = db.getList(listID);
 				newList.setName(name);
-				long listID = db.createList(newList);
-				List<ProductModel> products = db.getAllProduct(-1);
-				
-				for (ProductModel pdb : products) {
-					if (pdb.getIDList() == -1) {
-						pdb.setIDList(Integer.valueOf(String.valueOf(listID)));
-						db.updateProduct(pdb);					}
-				}
-				
+				db.updateList(newList);		
 				NavUtils.navigateUpFromSameTask(this);
 		
 		}
@@ -108,8 +147,14 @@ public class CreateNewListDataBaseActivity extends ListActivity {
 	}
 	
 	public void openNewPageToScan(View view){
+		newList = db.getList(listID);
+		newList.setName(name);
+		db.updateList(newList);
+		//Log.d("id listy", String.valueOf(db.getList(listID).getId()));
+		//Log.d("id listy232", db.getList(listID).getName());
 		Intent intent = new Intent(this, AddNewProduct.class);
-		startActivity(intent);	
+		intent.putExtra("LIST_ID", String.valueOf(listID));
+		startActivity(intent);
 	}
 	
 

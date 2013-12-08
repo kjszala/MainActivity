@@ -6,21 +6,22 @@ import java.util.List;
 import com.example.shoppinglist.adapters.AdapterListsList;
 import com.example.shoppinglist.sqlite.helper.DatabaseHelper;
 import com.example.shoppinglist.sqlite.model.ListModel;
+import com.example.shoppinglist.sqlite.model.ProductModel;
 
 import android.os.Bundle;
 import android.app.ListActivity;
-import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.support.v4.app.NavUtils;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
-import android.widget.TextView;
 
 public class BrowseExistingListDataBaseActivity extends ListActivity {
 	DatabaseHelper db;
@@ -38,26 +39,55 @@ public class BrowseExistingListDataBaseActivity extends ListActivity {
 		AdapterListsList adapter = new AdapterListsList(this,
                 R.layout.lists_list_item, listDataForList);
 		// Reading all contacts
-        Log.d("Reading: ", "Reading all contacts111111111.."); 
         listView2 = getListView();
-        listView2.setOnItemClickListener(new OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            	Log.d("czy wogole wchodzi do niego", "ciekawe");
-                
-                // selected item 
-                int listID = Integer.valueOf(((TextView) view).getText().toString());
-                 Log.d("weszlo cos",((TextView) view).getText().toString());
-                // Launching new Activity on selecting single List Item
-                Intent i = new Intent(getApplicationContext(), EditExistingListDataBase.class);
-                // sending data to new activity
-                i.putExtra("listID", listID);
-                startActivity(i);       
-            }
-
-  		
-          });
+        registerForContextMenu(listView2);
         listView2.setAdapter(adapter);
 	}
+	
+    /**
+     * Creates context menu on point list view
+     */
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo){
+            super.onCreateContextMenu(menu, v, menuInfo);
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.list_context_menu, menu);
+    }
+    
+    
+    /**
+     * Sterring in context menu
+     */
+    @Override
+    public boolean onContextItemSelected(MenuItem item){ 		
+    	AdapterContextMenuInfo  adapterList = (AdapterContextMenuInfo)item.getMenuInfo();     
+    	switch(item.getItemId()) {
+    	case R.id.delete_item_context:
+    		long helpID = Long.valueOf(String.valueOf(adapterList.id));
+    		List<ProductModel> productToDelete = db.getAllProduct(helpID);
+    		if(productToDelete.size() > 0 ){
+    		for(ProductModel productInList : productToDelete){
+    		db.deleteProduct(productInList.getId());
+    		}
+    		}
+    		db.deleteList(db.getList(helpID));
+    		listView2.invalidateViews();
+    		
+           break;
+            
+    	
+    	
+    	case R.id.eddit_item_context:
+    		long helpIDEdit = Long.valueOf(String.valueOf(adapterList.id));
+    	    Intent intent = new Intent(this, CreateNewListDataBaseActivity.class);
+    		intent.putExtra("LIST_ID", String.valueOf(helpIDEdit));
+    	    startActivity(intent);
+    		break;
+    		
+    	}
+		return false;
+    }
+    
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.

@@ -100,7 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      
         // insert row
         long list_id = db.insert(TABLE_LIST, null, values);
-        db.close();
+
         return list_id;
     }
     
@@ -116,24 +116,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      
         // insert row
         long barCodes_id = db.insert(TABLE_BAR_CODE, null, values);
-        db.close();
+
         return barCodes_id;
     }
  
     /*
      * Creating a product
      */
-    public long createProduct(ProductModel products, long barCode_id, long list_id) {
+    public long createProduct(ProductModel products) {
         SQLiteDatabase db = this.getWritableDatabase();
      
         ContentValues values = new ContentValues();
         values.put(KEY_AMOUNT, products.getAmount());
-        values.put(KEY_BARCODE_ID, barCode_id);
-        values.put(KEY_LIST_ID, list_id);
+        values.put(KEY_BARCODE_ID, products.getIDBarCode());
+        values.put(KEY_LIST_ID, products.getIDList());
      
         // insert row
         long product_id = db.insert(TABLE_PRODUCT, null, values);
-        db.close();
+
         return product_id;
     }
 
@@ -161,7 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ListModel ldb = new ListModel();
         ldb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         ldb.setName((c.getString(c.getColumnIndex(KEY_NAME))));
-        db.close();
+
         return ldb;
     }
     
@@ -178,15 +178,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(selectQuery, null);
      
         // looping through all rows and adding to list
-        if (c.moveToFirst()) {  
-            while(c.moveToNext()){
+        if (c.moveToFirst()) {
+            do {
             	int id = c.getInt(c.getColumnIndex(KEY_ID));
             	String name = c.getString(c.getColumnIndex(KEY_NAME));
             	list.add(new ListModel(id, name));
-            }
-        }
+            } while (c.moveToNext());
+       }
+              
         c.close();
-        db.close();
+
         return list;
     }
     
@@ -201,7 +202,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      
         // updating row
         int databaseID = db.update(TABLE_LIST, values, KEY_ID + " = ?", new String[] { String.valueOf(list.getId()) });
-        db.close();
+
         return databaseID;
     }
 
@@ -222,7 +223,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // now delete the bar code
         db.delete(TABLE_LIST, KEY_ID + " = ?",
                 new String[] { String.valueOf(listToDelete.getId()) });
-        db.close();
     	
     }
 
@@ -237,7 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
  
         // Inserting Row
         db.insert(TABLE_LIST, null, values);
-        db.close();
+
     }
     
     
@@ -266,7 +266,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         bcdb.setName((c.getString(c.getColumnIndex(KEY_NAME))));
         bcdb.setBarCode(c.getString(c.getColumnIndex(KEY_BARCODESTRING)));
         c.close();
-        db.close();
+
         return bcdb;
     }
     
@@ -285,15 +285,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         
         if (c.moveToFirst()) {
-        	while(c.moveToNext()){
+            do {
             	int id = c.getInt(c.getColumnIndex(KEY_ID));
             	String name = c.getString(c.getColumnIndex(KEY_NAME));
             	String barCodeName = c.getString(c.getColumnIndex(KEY_BARCODESTRING));
             	barCodes.add(new BarcodeModel(id, name, barCodeName));
-            }          
-        }
+            } while (c.moveToNext());
+       }
+        
         c.close();
-        db.close();
+
         return barCodes;
     }
     
@@ -310,7 +311,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // updating row
         int databaseID = db.update(TABLE_BAR_CODE, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(barCodes.getId()) });
-        db.close();
+
         return databaseID;
     }
 
@@ -333,7 +334,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // now delete the bar code
         db.delete(TABLE_BAR_CODE, KEY_ID + " = ?",
                 new String[] { String.valueOf(barCodes.getId()) });
-        db.close();
     }
 
     /*
@@ -347,7 +347,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_BARCODESTRING, barCodes.getBarCode()); 
          
         db.insert(TABLE_BAR_CODE, null, values);
-        db.close(); 
+
     }
     
     
@@ -375,7 +375,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         pdb.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         pdb.setAmount((c.getInt(c.getColumnIndex(KEY_AMOUNT))));
         c.close();
-        db.close();
+
         return pdb;
     }
     
@@ -393,17 +393,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	SQLiteDatabase db = this.getReadableDatabase();
     	Cursor c = db.rawQuery(selectQuery, null);
     	
-    	if(c.moveToFirst()) {
-    		while(c.moveToNext()){
+        if (c.moveToFirst()) {
+            do {
             	int id = c.getInt(c.getColumnIndex(KEY_ID));
             	int amount = c.getInt(c.getColumnIndex(KEY_AMOUNT));
             	int barCodesID = c.getInt(c.getColumnIndex(KEY_BARCODE_ID));
             	int listID = c.getInt(c.getColumnIndex(KEY_LIST_ID));
             	products.add(new ProductModel(id, amount, barCodesID, listID));
-            }      		   		
-    	}
+            } while (c.moveToNext());
+       }
+    	
     	c.close();
-        db.close();
+
     	return products;
     }
     
@@ -412,28 +413,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * */
     public List<ProductModel> getAllProduct(long list_id) {
         List<ProductModel> products = new ArrayList<ProductModel>();
-        String selectQuery = "SELECT  * FROM " + TABLE_PRODUCT + " tp " 
-        					+ " WHERE " 
-        					+ " tp." + KEY_LIST_ID + " = " + list_id ;
+        String selectQuery = "SELECT  * FROM " + TABLE_PRODUCT +  " WHERE " 
+        					+ KEY_LIST_ID + " = " + list_id ;
      
         Log.e(LOG, selectQuery);
      
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c = db.rawQuery(selectQuery, null);
-     
+
+    	Log.d("to tu wogóle wchodzi?", " ");
         // looping through all rows and adding to list
-        if (c.moveToFirst()) {
-        	while(c.moveToNext()){
-            	int id = c.getInt(c.getColumnIndex(KEY_ID));
-            	int amount = c.getInt(c.getColumnIndex(KEY_AMOUNT));
-            	int barCodesID = c.getInt(c.getColumnIndex(KEY_BARCODE_ID));
-            	int listID = c.getInt(c.getColumnIndex(KEY_LIST_ID));
-            	products.add(new ProductModel(id, amount, barCodesID, listID));
-            }   
-        }
+        	     	
+        	if (c.moveToFirst()) {
+        		int i = 0;
+                do {
+                	i++;
+                	Log.d("to tu wogóle wchodzi?", String.valueOf(i));
+                	int id = c.getInt(c.getColumnIndex(KEY_ID));
+                	int amount = c.getInt(c.getColumnIndex(KEY_AMOUNT));
+                	int barCodesID = c.getInt(c.getColumnIndex(KEY_BARCODE_ID));
+                	int listID = c.getInt(c.getColumnIndex(KEY_LIST_ID));
+                	products.add(new ProductModel(id, amount, barCodesID, listID));
+                	Log.d(String.valueOf(id), String.valueOf(listID));
+                } while (c.moveToNext());
+           }
+        
      
         c.close();
-        db.close();
+
         return products;
     }
     
@@ -449,7 +456,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // updating row
         int databaseID = db.update(TABLE_PRODUCT, values, KEY_ID + " = ?",
                 new String[] { String.valueOf(product.getId()) });
-        db.close();
+
         return databaseID;
     }
 
@@ -460,7 +467,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     	SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_PRODUCT, KEY_ID + " = ?",
                 new String[] { String.valueOf(product_id) });
-        db.close();
     }
 
     /*
@@ -475,7 +481,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_LIST_ID, list_id);
          
         db.insert(TABLE_PRODUCT, null, values);
-        db.close(); 
+
     }
     
     /*
@@ -490,7 +496,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_LIST_ID, list_id);
          
         db.insert(TABLE_PRODUCT, null, values);
-        db.close(); 
+
     }
     
  /*

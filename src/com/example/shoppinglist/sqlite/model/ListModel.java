@@ -1,7 +1,7 @@
 package com.example.shoppinglist.sqlite.model;
 
 public class ListModel {
-	int id;
+	long id;
 	String name;
 	
 	public ListModel(){
@@ -12,14 +12,14 @@ public class ListModel {
 		this.name=name;
 	}
 	
-	public ListModel(int id, String name){
+	public ListModel(long id, String name){
 		this.id = id;
 		this.name = name;
 	}
 	
 	//getters
 	
-	public int getId(){
+	public long getId(){
 		return this.id;
 	}
 	
@@ -29,7 +29,7 @@ public class ListModel {
 	
 	//setters
 
-	public void setId(int id){
+	public void setId(long id){
 		this.id=id;
 	}
 	

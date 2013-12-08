@@ -6,7 +6,7 @@ import com.example.shoppinglist.sqlite.model.ListModel;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract.Helpers;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -40,9 +40,11 @@ public class MainActivity extends Activity {
 		DatabaseHelper db = new DatabaseHelper(this);
 		ListModel newList = new ListModel();
 		long listID = db.createList(newList);
-		
+		db.close();
+	
 		Intent intent = new Intent(this, CreateNewListDataBaseActivity.class);
-		intent.putExtra("LIST_ID", listID);
+		Log.d("to jest id listy",String.valueOf(listID));
+		intent.putExtra("LIST_ID", String.valueOf(listID));
 		startActivity(intent);
 	}
 
